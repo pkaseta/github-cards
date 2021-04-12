@@ -1,28 +1,39 @@
 import React, { useState } from 'react'
 import './App.css';
-import { Button, Card, Col, InputGroup, FormControl } from 'react-bootstrap'
-import Form from 'react-bootstrap/Form'
+import { Button, Card, Form, InputGroup, FormControl } from 'react-bootstrap'
+
 
 function App() {
   const [user, setUser] = useState({})
   const [active, setActive] = useState(false)
+  const [userInput, setUserInput] = useState('')
 
   const handleToggle = () => {
-
-    console.log('Button is working')
-    fetch('https://api.github.com/users/pkaseta ')
+    fetch(`https://api.github.com/users/${userInput} `)
       .then((res) => res.json())
       .then((data) => setUser(data))
       .then(setActive(!active))
   }
+
   return (
     <div className='mainPage'>
 
-      <h1>Paul K's Github Card</h1>
+      <h1>Github Cards</h1>
       <br />
 
-      <Button style={{ marginBottom: '20px' }} variant="outline-dark" onClick={handleToggle}>
-        {active === false ? 'View Pauls Github' : 'cancel view'}</Button>
+      <Form inline
+        style={{ display: 'flex', justifyContent: 'center' }}>
+        <Form.Label htmlFor="inlineFormInputGroupUsername2" srOnly>
+          Username
+        </Form.Label>
+
+        <InputGroup className="mb-2 mr-sm-2">
+          <FormControl id="inlineFormInputGroupUsername2" placeholder="Username" onChange={(e) => setUserInput(e.target.value)} />
+        </InputGroup>
+
+        <Button style={{ marginBottom: '20px' }} variant="outline-dark" onClick={handleToggle}>
+          {active === false ? `View ${userInput}'s Github` : 'cancel view'}</Button>
+      </Form>
 
       {active === true ? <Card style={{ width: '18rem', margin: 'auto' }}>
         {active === true ? <Card.Img variant="top" src={user.avatar_url} /> : ''}
